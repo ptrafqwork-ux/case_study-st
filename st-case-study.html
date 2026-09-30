@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ST Portal Revamp — Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0E0E0E;
+  --surface: #161616;
+  --surface2: #1a1a1a;
+  --white: #F2F0ED;
+  --mid: #8A8580;
+  --dim: #4A4540;
+  --pop: #E61E2A;
+  --pop-dim: rgba(230,30,42,0.15);
+  --pop-faint: rgba(230,30,42,0.07);
+  --positive: #102694;
+  --positive-dim: rgba(16,38,148,0.15);
+  --grid: rgba(255,255,255,0.04);
+  --line: rgba(255,255,255,0.08);
+  --font: 'Urbanist', system-ui, sans-serif;
+  --col: 1312px;
+  --wide: 1312px;
+  --content: 900px;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--white);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:120px 120px;
+  background-attachment:fixed;
+}
+::selection{background:var(--white);color:var(--bg)}
+a{color:inherit}
+
+.col{max-width:var(--col);margin:0 auto;padding:0 64px}
+.col > *:not(.findings):not(.frame):not(.cards):not(.split):not(.ref-grid):not(.stat-row):not(.flow):not(.ia-showcase){max-width:var(--content)}
+.wide{max-width:var(--wide);margin:0 auto;padding:0 64px}
+
+/* ── HERO ── */
+.hero{
+  padding:160px 64px 100px;
+  max-width:var(--wide);
+  margin:0 auto;
+}
+.hero-eyebrow{
+  font-size:.75rem;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim);
+  margin-bottom:40px;
+  display:flex;align-items:center;gap:14px;
+}
+.hero-eyebrow::before{
+  content:'';width:32px;height:1px;background:var(--dim);
+}
+.hero h1{
+  font-size:clamp(3.6rem,9vw,8rem);
+  font-weight:900;line-height:.88;
+  letter-spacing:-.05em;text-transform:uppercase;
+  margin-bottom:48px;
+}
+.hero h1 .pop{color:var(--white)}
+.hero-sub{
+  font-size:1.5rem;font-weight:400;line-height:1.6;
+  color:var(--mid);max-width:560px;margin-bottom:72px;
+}
+.hero-meta{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:24px;padding-top:40px;
+  border-top:1px solid var(--line);
+}
+.hero-meta dt{
+  font-size:.75rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim);margin-bottom:6px;
+}
+.hero-meta dd{font-size:.875rem;font-weight:700;color:var(--white)}
+
+/* ── DIVIDER ── */
+.divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--line) 20%,var(--line) 80%,transparent);
+  max-width:var(--wide);margin:0 auto;
+}
+
+/* ── MARQUEE ── */
+.marquee{
+  overflow:hidden;padding:18px 64px;
+  border-bottom:1px solid var(--line);
+}
+.marquee-track{
+  display:flex;width:max-content;
+  animation:slide 30s linear infinite;
+}
+@keyframes slide{to{transform:translateX(-50%)}}
+.marquee-track span{
+  font-size:.75rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--dim);
+  white-space:nowrap;padding:0 28px;
+}
+.marquee-track .dot{color:var(--dim);padding:0 6px}
+
+/* ── SECTIONS ── */
+.section{padding:120px 0;overflow:hidden}
+.section + .section{border-top:1px solid var(--line)}
+
+.section-label{
+  font-size:.75rem;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim);
+  margin-bottom:24px;display:flex;align-items:center;gap:10px;
+}
+.section-label::before{
+  content:'';width:8px;height:8px;border-radius:50%;
+  background:var(--dim);
+}
+.section-label--problem{color:var(--pop)}
+.section-label--problem::before{background:var(--pop);opacity:.4}
+
+.section-title{
+  font-size:clamp(2rem,4.5vw,3.4rem);
+  font-weight:800;line-height:1.05;
+  letter-spacing:-.035em;text-transform:uppercase;
+  margin-bottom:40px;max-width:600px;
+}
+.section-title .pop{color:var(--white)}
+.section-title .pop--red{color:var(--pop)}
+
+.body{
+  font-size:1.5rem;font-weight:400;line-height:1.6;
+  color:var(--mid);max-width:520px;
+}
+.body + .body{margin-top:14px}
+.body strong{color:var(--white);font-weight:600}
+
+/* ── FINDINGS ── */
+.findings{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:14px;
+  overflow:hidden;margin-top:48px;
+}
+.finding{background:var(--bg);padding:36px 30px}
+.finding-n{
+  font-size:3rem;font-weight:900;
+  color:var(--white);opacity:.08;line-height:1;
+  margin-bottom:14px;letter-spacing:-.04em;
+}
+.finding h3{
+  font-size:1.5rem;font-weight:800;
+  text-transform:uppercase;letter-spacing:.03em;
+  margin-bottom:10px;
+}
+.finding p{font-size:1rem;line-height:1.65;color:var(--mid)}
+
+/* ── CALLOUT ── */
+.callout{
+  border-left:3px solid var(--line);
+  padding:28px 30px;
+  background:var(--surface);
+  border-radius:0 10px 10px 0;
+  margin:48px 0;
+}
+.callout--problem{
+  border-left-color:var(--pop);
+  background:var(--pop-faint);
+}
+.callout p{
+  font-size:1.5rem;font-weight:500;
+  line-height:1.6;color:var(--white);
+  font-style:italic;
+}
+
+/* ── FRAME (image container) ── */
+.frame{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:hidden;
+  position:relative;
+}
+.frame img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:top;
+  display:block;
+}
+.frame--16{aspect-ratio:16/9}
+.frame--43{aspect-ratio:4/3}
+.frame--scroll{
+  max-height:500px;overflow-y:auto;
+  aspect-ratio:auto;
+}
+.frame--scroll img{height:auto;object-fit:contain}
+.case-img{
+  width:100%;height:auto;border-radius:12px;display:block;
+  border:1px solid var(--line);
+}
+.frame--placeholder{
+  display:flex;align-items:center;justify-content:center;
+  border-style:dashed;
+}
+.frame--placeholder span{
+  color:var(--dim);font-size:.75rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.06em;
+  text-align:center;max-width:260px;
+}
+
+/* ── IA SHOWCASE (full-width, breaks out of container) ── */
+.ia-showcase{
+  position:relative;
+  width:100vw;margin-left:calc(-50vw + 50%);
+  overflow:hidden;margin-top:48px;
+}
+.ia-showcase img{
+  width:100%;height:70vh;display:block;
+  object-fit:cover;object-position:top;
+}
+.ia-showcase-overlay{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:40px 28px 48px;
+  background:linear-gradient(to top,rgba(14,14,14,1) 0%,rgba(14,14,14,.85) 40%,transparent 100%);
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;gap:16px;
+}
+.ia-showcase-caption{
+  font-size:.875rem;font-weight:400;color:var(--mid);
+}
+.ia-showcase-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:.875rem;font-weight:700;
+  color:var(--white);text-decoration:none;
+  padding:12px 28px;border-radius:8px;
+  border:2px solid var(--white);
+  letter-spacing:.02em;
+  transition:background .2s,color .2s,gap .2s;
+}
+.ia-showcase-cta:hover{
+  background:var(--white);color:var(--bg);gap:14px;
+}
+
+/* ── SPLIT ── */
+.split{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:48px;align-items:start;
+}
+
+/* ── CARDS ── */
+.cards{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:16px;margin-top:48px;
+}
+.card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:12px;padding:30px;
+}
+.card h3{
+  font-size:1.5rem;font-weight:800;
+  text-transform:uppercase;letter-spacing:.03em;
+  margin-bottom:12px;
+}
+.card p{font-size:1rem;line-height:1.65;color:var(--mid)}
+.card--accent{
+  background:rgba(255,255,255,0.03);border-color:var(--white);
+}
+.card--accent h3{color:var(--white)}
+
+/* ── FLOW ── */
+.flow{
+  display:flex;align-items:center;gap:8px;
+  flex-wrap:wrap;margin:28px 0;
+}
+.flow-node{
+  font-size:.75rem;font-weight:700;
+  padding:9px 16px;border-radius:8px;
+  border:1px solid var(--line);background:var(--surface);
+  text-transform:uppercase;letter-spacing:.04em;
+}
+.flow-node--pop{
+  border-color:var(--white);background:rgba(255,255,255,0.05);color:var(--white);
+}
+.flow-arrow{color:var(--dim);font-size:.875rem}
+
+/* ── STATS ── */
+.stats{
+  background:var(--surface);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:100px 64px;
+  position:relative;
+}
+.stats::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 50% 80% at 75% 50%,var(--positive-dim),transparent 70%);
+  pointer-events:none;
+}
+.stats-inner{
+  max-width:var(--wide);margin:0 auto;position:relative;z-index:1;padding:0 64px;
+}
+.stats-inner > *:not(.stat-row){max-width:var(--content)}
+.stats .section-label{color:var(--dim)}
+.stats .section-label::before{background:var(--dim)}
+.stat-row{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:60px;margin-bottom:48px;
+}
+.stat-num{
+  font-size:clamp(3.5rem,7vw,6rem);
+  font-weight:900;line-height:1;letter-spacing:-.04em;
+}
+.stat-num .pop{color:var(--positive)}
+.stat-sub{
+  font-size:.75rem;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--dim);margin-top:10px;
+}
+.stat-desc{font-size:1.5rem;color:var(--mid);margin-top:4px;font-weight:500}
+.stat-caveat{
+  font-size:1rem;line-height:1.7;color:var(--dim);max-width:520px;
+}
+
+/* ── REFLECTION ── */
+.ref-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:16px;margin-top:48px;
+}
+.ref-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:12px;padding:32px;
+}
+.ref-card h3{
+  font-size:1.5rem;font-weight:800;
+  text-transform:uppercase;letter-spacing:.02em;
+  margin-bottom:14px;
+}
+.ref-card p{font-size:1rem;line-height:1.7;color:var(--mid)}
+
+/* ── PHASE 2 ── */
+.phase2{
+  background:var(--surface);color:#fff;
+  padding:100px 64px;position:relative;overflow:hidden;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+.phase2::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:64px 64px;pointer-events:none;
+}
+.phase2-inner{
+  max-width:var(--wide);margin:0 auto;position:relative;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:48px;align-items:center;
+}
+.phase2 .section-label{color:var(--dim)}
+.phase2 .section-label::before{background:var(--dim)}
+.phase2 .section-title{color:var(--white)}
+.phase2 .section-title .pop{color:var(--white)}
+.phase2 .body{color:var(--mid);max-width:100%}
+.phase2 .frame{
+  background:rgba(255,255,255,.03);border-color:var(--line);
+  color:var(--dim);
+}
+.phase2 .frame::before{
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:32px 32px;
+}
+
+/* ── FIGJAM LINK ── */
+.fjlink{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.875rem;font-weight:700;color:var(--mid);
+  text-decoration:none;margin-top:20px;
+  letter-spacing:.02em;transition:gap .2s,color .2s;
+}
+.fjlink:hover{gap:12px;color:var(--white)}
+
+/* ── FOOTER ── */
+footer{
+  padding:48px 64px;text-align:center;
+  border-top:1px solid var(--line);
+}
+footer p{
+  font-size:.75rem;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--dim);line-height:2.2;
+}
+
+/* ── HERO ENTRANCE (CSS only, no observer) ── */
+@keyframes rise{
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:none}
+}
+.hero-eyebrow,.hero h1,.hero-sub,.hero-meta{
+  animation:rise .7s cubic-bezier(.16,1,.3,1) both;
+}
+.hero h1{animation-delay:.1s}
+.hero-sub{animation-delay:.2s}
+.hero-meta{animation-delay:.3s}
+
+/* ── REVEAL (scroll-driven) ── */
+[data-rv]{
+  opacity:0;transform:translateY(20px);
+  transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1);
+}
+[data-rv].on{opacity:1;transform:none}
+[data-rv="1"]{transition-delay:.08s}
+[data-rv="2"]{transition-delay:.16s}
+[data-rv="3"]{transition-delay:.24s}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .hero{padding:120px 20px 60px}
+  .hero-meta{grid-template-columns:1fr 1fr;gap:20px}
+  .findings,.split,.cards,.stat-row,.ref-grid,.phase2-inner{
+    grid-template-columns:1fr;
+  }
+  .split{gap:32px}
+  .section{padding:80px 0}
+  .col,.wide{padding:0 20px}
+  .stats{padding:80px 20px}
+  .stats-inner{padding:0}
+  .phase2{padding:80px 20px}
+  .marquee{padding:18px 20px}
+  footer{padding:48px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div style="position:fixed;top:24px;right:24px;z-index:999;display:inline-flex;border-radius:100px;overflow:hidden;border:1px solid rgba(255,255,255,.12);background:rgba(14,14,14,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)">
+  <span style="font-family:'Urbanist',system-ui,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:8px 18px;color:#0a0a0a;background:#c9ff33;border-radius:100px">v1</span>
+  <a href="st-case-study-v2.html" style="font-family:'Urbanist',system-ui,sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:8px 18px;color:rgba(255,255,255,.45);text-decoration:none;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.45)'">v2</a>
+</div>
+<header class="hero">
+  <p class="hero-eyebrow">Suruhanjaya Tenaga — Energy Commission of Malaysia</p>
+  <h1>Untangling<br><span style="color:var(--pop)">years</span> of<br>architecture<br>debt</h1>
+  <p class="hero-sub">Staff became the navigation. Users called in to ask where things were on a portal that already had the answers. I rebuilt the micro IA, taxonomy, and content structure — then stayed through Drupal to make sure it held.</p>
+  <dl class="hero-meta">
+    <div><dt>Role</dt><dd>UX Architect</dd></div>
+    <div><dt>Scope</dt><dd>IA, User Flows, UI, Content Ops</dd></div>
+    <div><dt>Timeline</dt><dd>Jan — Apr 2026</dd></div>
+    <div><dt>Agency</dt><dd>Pocketpixel</dd></div>
+  </dl>
+  <img src="img/hero-mockup.png" alt="ST Portal — new homepage in monitor mockup" style="width:100%;height:auto;border-radius:12px;margin-top:60px;">
+</header>
+
+<div class="divider"></div>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span>Information Architecture</span><span class="dot">×</span>
+    <span>Taxonomy Design</span><span class="dot">×</span>
+    <span>Content Strategy</span><span class="dot">×</span>
+    <span>Drupal Implementation</span><span class="dot">×</span>
+    <span>Stakeholder Negotiation</span><span class="dot">×</span>
+    <span>Government Portal</span><span class="dot">×</span>
+    <span>191 Items Audited</span><span class="dot">×</span>
+    <span>Information Architecture</span><span class="dot">×</span>
+    <span>Taxonomy Design</span><span class="dot">×</span>
+    <span>Content Strategy</span><span class="dot">×</span>
+    <span>Drupal Implementation</span><span class="dot">×</span>
+    <span>Stakeholder Negotiation</span><span class="dot">×</span>
+    <span>Government Portal</span><span class="dot">×</span>
+    <span>191 Items Audited</span><span class="dot">×</span>
+  </div>
+</div>
+
+<!-- THE PROBLEM -->
+<section class="section">
+  <div class="col">
+    <p class="section-label section-label--problem" data-rv>The Problem</p>
+    <h2 class="section-title" data-rv="1">Four navigation systems.<br>Zero <span class="pop pop--red">clear paths.</span></h2>
+  </div>
+  <div class="col">
+    <div class="findings" data-rv="2">
+      <div class="finding">
+        <div class="finding-n">01</div>
+        <h3>Grouped by org chart, not user need</h3>
+        <p>Related information split across sections. The same need led to different places depending on which menu you tried.</p>
+      </div>
+      <div class="finding">
+        <div class="finding-n">02</div>
+        <h3>Deep hover menus, walls of text</h3>
+        <p>Four nav systems, 30+ items across nested layers. Key information buried several layers down. Technically reachable. Practically invisible.</p>
+      </div>
+      <div class="finding">
+        <div class="finding-n">03</div>
+        <h3>Links that looked like body text</h3>
+        <p>No colour, no underline, no shape. Staff had been manually pointing users to the right pages.</p>
+      </div>
+      <div class="finding">
+        <div class="finding-n">04</div>
+        <h3>Duplicate entry points everywhere</h3>
+        <p>Twelve topics in two or three menus. Worst offender: Contractors appeared in three separate navigation systems.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="callout callout--problem" data-rv>
+      <p>The problem wasn't missing content. It was missing structure. The path from user intent to content didn't exist.</p>
+    </div>
+  </div>
+  <div class="ia-showcase" data-rv>
+    <img src="img/old-ia-tree.png" alt="Existing information architecture — 4 navigation systems, hundreds of pages, no unifying structure">
+    <div class="ia-showcase-overlay">
+      <p class="ia-showcase-caption">The existing information architecture — 4 navigation systems, hundreds of pages, no unifying structure</p>
+      <a class="ia-showcase-cta" href="https://www.figma.com/board/Qfygr32XuJloTuzoUXzu5c" target="_blank" rel="noopener">Explore full IA board in FigJam →</a>
+    </div>
+  </div>
+</section>
+
+<!-- MAPPING -->
+<section class="section">
+  <div class="col">
+    <p class="section-label" data-rv>Understanding the system</p>
+    <h2 class="section-title" data-rv="1">Mapped everything before<br><span class="pop">touching anything.</span></h2>
+    <p class="body" data-rv="2">Audited every section, L2 page, tab, and nav element into Google Sheets — what exists, where it lives, what stays, what goes, what's missing. Became the content liaison across ST departments: confirming ownership, accuracy, and gaps.</p>
+    <p class="body" data-rv="2">What surfaced: duplicates, orphaned pages, related content separated across sections, and an entire site organised by which team created the content rather than who needed it.</p>
+  </div>
+  <div class="col" style="margin-top:48px">
+    <div class="frame" data-rv>
+      <img src="img/content-audit.png" alt="Content audit spreadsheet — 190+ items tracked across current menu, proposed menu, decision, CMS status, and IA status">
+    </div>
+  </div>
+</section>
+
+<!-- DECISIONS -->
+<section class="section">
+  <div class="col">
+    <p class="section-label" data-rv>The decisions</p>
+    <h2 class="section-title" data-rv="1">Rebuilding micro IA under<br>a <span class="pop">moving target.</span></h2>
+  </div>
+  <div class="col">
+    <div class="card card--accent" data-rv="2">
+      <h3>The mid-project reset</h3>
+      <p>Initial direction: user-oriented topics. February: leadership changed the high-level IA to a corporate communications structure. The high-level was their call. I rebuilt the micro IA underneath — repositioning content, regrouping pages, redefining relationships under a new taxonomy. No timeline extension. Launch date didn't move.</p>
+    </div>
+  </div>
+  <div class="col" style="margin-top:48px">
+    <div class="split" data-rv>
+      <div class="frame frame--scroll"><img src="img/old-proposed-ia.png" alt="Old proposed IA — sprawling vertical tree across Consumer, Electricity, Gas, Energy Efficiency sections"></div>
+      <div class="frame frame--scroll" style="border-color:var(--white)"><img src="img/new-ia.png" alt="New IA — modular sections with clear level labeling, cleaner hierarchy"></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="callout" data-rv>
+      <p>The old navigation was optimised for reach — every destination accessible in two hovers. But reach isn't findability.</p>
+    </div>
+  </div>
+  <div class="col">
+    <div class="cards" data-rv>
+      <div class="card">
+        <h3>Old: optimised for speed</h3>
+        <p>Hover menus exposed 30+ items simultaneously. Zero clicks to reach any destination. But one wrong mouse movement collapsed the menu. Users <em>could</em> reach anything in 2 hovers. In practice, they called staff.</p>
+      </div>
+      <div class="card">
+        <h3>New: optimised for confidence</h3>
+        <p>Progressive disclosure — 3 to 6 choices per step, each legible, each leading somewhere predictable. More clicks, but each click is confident. Users see where they're going before they commit.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col" style="margin-top:48px">
+    <p class="section-label" data-rv>New stepped path</p>
+    <div class="flow" data-rv>
+      <span class="flow-node flow-node--pop">Stakeholders</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-node flow-node--pop">Electricity</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-node flow-node--pop">Licensing</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-node flow-node--pop">Application list</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-node flow-node--pop">Detail + CTA</span>
+    </div>
+  </div>
+  <div class="col" style="margin-top:48px">
+    <div class="cards" data-rv>
+      <div class="card">
+        <h3>Negotiating with content owners</h3>
+        <p>Client wanted the static HTML table made interactive — hyperlink rows to PDFs, remove the cards. I pushed back: every PDF download across the portal uses the card pattern. One section breaking that means users re-learn how downloads work. Table stays as reference. Cards handle downloads.</p>
+      </div>
+      <div class="card" style="background:transparent;border:none">
+        <p style="color:var(--white);font-size:1rem;line-height:1.65">Some feedback was accepted. Some was challenged. Some was negotiated into a middle ground. Every decision had a reason I could articulate to stakeholders who had their own valid priorities.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- UI -->
+<section class="section">
+  <div class="col">
+    <p class="section-label" data-rv>Interface design</p>
+    <h2 class="section-title" data-rv="1">UI that <span class="pop">reinforced</span><br>the architecture.</h2>
+  </div>
+  <div class="wide" style="margin-top:48px">
+    <div class="split" data-rv>
+      <div class="frame frame--43"><img src="img/ui-cards-page.png" alt="ST portal — horizontal application cards with link icons on the Electricity Licencing page"></div>
+      <div>
+        <p class="body" style="max-width:100%">Horizontal cards for scannable options. Stronger link and CTA treatment — the old site had links that looked like body text. Topic landing pages showing only subtopics. Inside pages with one job: get the user to the next step.</p>
+        <p class="body" style="margin-top:14px;color:var(--dim);max-width:100%">Homepage styling was handled by my creative director. Inside pages were mine.</p>
+      </div>
+    </div>
+  </div>
+  <div class="wide" style="margin-top:24px">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px" data-rv>
+      <div class="frame frame--43"><img src="img/topic-landing.png" alt="Topic landing page — Electricity stakeholders with intent-based card navigation"></div>
+      <div class="frame frame--43"><img src="img/list-page.png" alt="List page — Guidelines section with document cards, tags, and issue dates"></div>
+      <div class="frame frame--43"><img src="img/detail-cta.png" alt="Detail page — Approval to Install with CTA link card, tabbed sections, and content overview"></div>
+    </div>
+  </div>
+</section>
+
+<!-- DRUPAL -->
+<section class="section">
+  <div class="wide">
+    <div class="split" data-rv>
+      <div>
+        <p class="section-label">Implementation</p>
+        <h2 class="section-title" style="margin-bottom:24px">Surviving<br><span class="pop">Drupal.</span></h2>
+        <p class="body" style="max-width:100%">New IA meant new taxonomy in the CMS. Content retagged, reassigned, realigned — on a live system still serving users. I was in the CMS doing it: editing, uploading, checking layouts, overseeing migration across dozens of pages.</p>
+        <p class="body" style="margin-top:14px;max-width:100%">If I'd handed off the IA as a document and walked away, the structure would've degraded the moment operators started working without the new logic enforced. Staying was deliberate.</p>
+      </div>
+      <div class="frame frame--43 frame--placeholder"><span>Drupal backend — taxonomy and content editing</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPENDENCY -->
+<section class="section">
+  <div class="col">
+    <p class="section-label" data-rv>What the reset exposed</p>
+    <h2 class="section-title" data-rv="1">One upstream change cascaded into rework at <span class="pop">every layer.</span></h2>
+    <div class="flow" data-rv="2" style="justify-content:center;margin-top:40px">
+      <span class="flow-node">IA</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-node">Taxonomy</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-node">Content</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-node">Design</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-node">Implementation</span>
+    </div>
+    <p class="body" data-rv="3" style="margin-top:32px">The February IA change landed after micro IA was being built, content was being mapped, and design had started. No timeline extension. This exposed the dependency chain I now carry forward: map dependencies early, lock IA–taxonomy relationships before implementation starts, identify content ownership before content needs to move.</p>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stats-inner">
+    <p class="section-label" data-rv>After launch — what I observed</p>
+    <div class="stat-row" data-rv="1">
+      <div>
+        <div class="stat-num">~2k</div>
+        <div class="stat-sub">Apr – Sep 2025</div>
+        <div class="stat-desc">New users (old site)</div>
+      </div>
+      <div>
+        <div class="stat-num"><span class="pop">~357k</span></div>
+        <div class="stat-sub">Apr – Sep 2026</div>
+        <div class="stat-desc">New users (new site)</div>
+      </div>
+    </div>
+    <p class="stat-caveat" data-rv="2">I can't attribute this to IA work alone — marketing, SEO from cleaner structures, and re-indexing could all have contributed. The number is directionally consistent with the findability problem getting addressed. Correlation is all I can honestly claim.</p>
+  </div>
+</div>
+
+<!-- REFLECTION -->
+<section class="section">
+  <div class="col">
+    <p class="section-label" data-rv>Reflection</p>
+    <h2 class="section-title" data-rv="1">What I<br><span class="pop">took away.</span></h2>
+  </div>
+  <div class="col">
+    <div class="ref-grid" data-rv="2">
+      <div class="ref-card">
+        <h3>What I'd do differently</h3>
+        <p>Map dependencies earlier. Lock taxonomy before implementation runs. Identify content ownership before migration starts. Build validation checkpoints so upstream changes get caught before they cascade.</p>
+      </div>
+      <div class="ref-card">
+        <h3>What this made me better at</h3>
+        <p>Holding the thread across IA, taxonomy, content, design, and implementation simultaneously. These layers are tightly coupled. On this project, I was that thread.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHASE 2 -->
+<div class="phase2">
+  <div class="phase2-inner">
+    <div>
+      <p class="section-label" data-rv>Phase 2</p>
+      <h2 class="section-title" data-rv="1">From navigation<br>to <span class="pop">conversation.</span></h2>
+      <p class="body" data-rv="2" style="margin-top:24px">After launch, I designed the chatbot IA for Cik Tenaga. Two approaches: topic-based vs intention-based. I defended intention-based — users come to a chatbot with a task, not a topic. Same logic the portal IA was rebuilt on.</p>
+      <p class="body" data-rv="2" style="margin-top:12px">ST accepted the direction.</p>
+      <a class="fjlink" href="https://www.figma.com/board/w9PUgW4JDCMqzh0ZyqABLr" target="_blank" rel="noopener" style="color:var(--mid)" data-rv="3">Explore chatbot flow in FigJam →</a>
+    </div>
+    <div class="frame frame--scroll" data-rv="1">
+      <img src="img/chatbot-flow.png" alt="Cik Tenaga chatbot conversation flow — intention-based decision tree across Electricity, Gas, and Energy Efficiency sectors">
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>Suruhanjaya Tenaga — Untangling Years of Architecture Debt</p>
+  <p>IA · UX · Content Operations · Drupal · 2026</p>
+</footer>
+
+<script>
+(function(){
+  var q = Array.from(document.querySelectorAll('[data-rv]'));
+  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+    q.forEach(function(e){e.classList.add('on')});return;
+  }
+  function check(){
+    var wh = window.innerHeight;
+    q = q.filter(function(el){
+      if(el.getBoundingClientRect().top < wh + 80){
+        el.classList.add('on'); return false;
+      }
+      return true;
+    });
+    if(!q.length) window.removeEventListener('scroll',check);
+  }
+  window.addEventListener('scroll',check,{passive:true});
+  check();
+})();
+</script>
+</body>
+</html>

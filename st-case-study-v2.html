@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ST Portal Revamp — Case Study v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Ubuntu+Sans+Mono:wght@400;500;600;700;800;900&family=Urbanist:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --dark:#0a0a0a;
+  --light:#f1f0ea;
+  --white:#ffffff;
+  --mid:#8a8580;
+  --dim:#4a4540;
+  --lime:#c9ff33;
+  --purple:#8c62ff;
+  --orange:#ff6b45;
+  --red:#ec221f;
+  --surface:#161616;
+  --surface2:#1e1e1e;
+  --line:rgba(255,255,255,.1);
+  --line-dark:rgba(0,0,0,.1);
+  --col:1312px;
+  --pad:56px;
+  --heading:'Urbanist',system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+  --mono:'Ubuntu Sans Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--body);
+  background:var(--dark);
+  color:var(--light);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--lime);color:var(--dark)}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+
+.col{max-width:var(--col);margin:0 auto;padding:0 var(--pad)}
+
+/* ── SECTIONS ── */
+section{padding:120px 0}
+section.dark{background:var(--dark);color:var(--light)}
+section.light{background:var(--light);color:var(--dark)}
+section.lime-bg{background:var(--lime);color:var(--dark)}
+
+/* ── SECTION MARKER ── */
+.sec-marker{
+  font-family:var(--mono);font-size:.75rem;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:48px;display:flex;align-items:center;gap:12px;
+}
+.dark .sec-marker{color:var(--mid)}
+.light .sec-marker{color:var(--dim)}
+
+/* ── HEADING / BODY SPLIT ── */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.split h2{
+  font-family:var(--heading);font-weight:800;
+  font-size:clamp(2.4rem,4.5vw,3.6rem);line-height:1.05;
+  letter-spacing:-.03em;
+}
+.split .body{font-size:1.05rem;line-height:1.75;opacity:.8}
+.dark .split .body{color:rgba(242,240,237,.75)}
+.light .split .body{color:rgba(10,10,10,.7)}
+
+/* ── TAGS ── */
+.tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Ubuntu Sans Mono',monospace;font-size:12px;font-weight:900;
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:6px 14px;border-radius:100px;
+}
+.tag-lime{background:var(--lime);color:var(--dark)}
+.tag-purple{background:var(--purple);color:#fff}
+.tag-orange{background:var(--orange);color:#fff}
+.tag-outline{border:1px solid var(--mid);color:var(--mid);background:transparent}
+.tag-dark{background:var(--dark);color:var(--light)}
+.tag-red{background:rgba(236,34,31,.15);color:var(--red);border:1px solid rgba(236,34,31,.3)}
+.tag-green{background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.25)}
+.tag-yellow{background:rgba(234,179,8,.12);color:#eab308;border:1px solid rgba(234,179,8,.25)}
+
+/* ── CARDS ── */
+.card{
+  padding:32px;border-radius:16px;
+}
+.dark .card{background:var(--surface);border:1px solid var(--line)}
+.light .card{background:#fff;border:1px solid var(--line-dark);box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card-num{
+  font-family:var(--mono);font-size:.7rem;font-weight:600;
+  letter-spacing:.08em;color:var(--mid);margin-bottom:12px;
+}
+.card h4{
+  font-family:var(--heading);font-weight:700;font-size:1.15rem;
+  margin-bottom:10px;line-height:1.3;
+}
+.card p{font-size:.92rem;line-height:1.65;opacity:.75}
+
+/* ── BROWSER FRAME ── */
+.browser{
+  border-radius:12px;overflow:hidden;
+  border:1px solid var(--line);
+}
+.browser-bar{
+  display:flex;align-items:center;gap:8px;
+  padding:12px 16px;background:#1a1a1a;
+  border-bottom:1px solid var(--line);
+}
+.browser-dot{width:10px;height:10px;border-radius:50%}
+.browser-dot.r{background:#ff5f56}
+.browser-dot.y{background:#ffbd2e}
+.browser-dot.g{background:#27c93f}
+.browser-url{
+  flex:1;margin-left:12px;padding:6px 14px;
+  background:rgba(255,255,255,.06);border-radius:6px;
+  font-family:var(--mono);font-size:.72rem;color:var(--mid);
+}
+.browser-body{
+  background:var(--surface);padding:0;min-height:320px;
+  position:relative;
+}
+.light .browser{border-color:var(--line-dark)}
+.light .browser-bar{background:#e8e7e2}
+.light .browser-url{background:rgba(0,0,0,.06);color:var(--dim)}
+.light .browser-body{background:#fff}
+
+/* ── NUMBERED LIST ── */
+.num-list{list-style:none;counter-reset:nl}
+.num-list li{
+  counter-increment:nl;
+  padding:14px 0;border-bottom:1px solid var(--line);
+  font-size:.95rem;line-height:1.6;
+  display:flex;gap:16px;align-items:baseline;
+}
+.light .num-list li{border-bottom-color:var(--line-dark)}
+.num-list li::before{
+  content:counter(nl);
+  font-family:var(--mono);font-size:.7rem;font-weight:600;
+  color:var(--mid);min-width:20px;
+}
+
+/* ── COMPARISON PANELS ── */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.compare-panel{
+  border-radius:12px;padding:32px;
+  border:1px solid var(--line);
+}
+.compare-label{
+  font-family:var(--mono);font-size:.65rem;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;
+  margin-bottom:16px;display:flex;align-items:center;gap:8px;
+}
+
+/* ── STATS ── */
+.stat-big{
+  font-family:var(--heading);font-weight:900;
+  font-size:clamp(4rem,10vw,7rem);line-height:1;
+  letter-spacing:-.04em;
+}
+
+/* ── BUTTONS ── */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:.75rem;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;
+  padding:14px 28px;border-radius:100px;border:none;cursor:pointer;
+  transition:transform .2s;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn-lime{background:var(--lime);color:var(--dark)}
+.btn-dark{background:var(--dark);color:var(--light)}
+.btn-outline{background:transparent;border:1px solid var(--mid);color:inherit}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  :root{--pad:24px}
+  section{padding:80px 0}
+  .split{grid-template-columns:1fr;gap:32px}
+  .compare{grid-template-columns:1fr}
+  .hero-inner h1{font-size:clamp(2.4rem,8vw,3.6rem)!important}
+}
+@media(max-width:600px){
+  .meta-grid{grid-template-columns:1fr 1fr!important}
+  .principle-grid{grid-template-columns:1fr!important}
+}
+
+/* ── REVEAL ANIMATION ── */
+[data-rv]{opacity:0;transform:translateY(24px);transition:opacity .6s,transform .6s}
+[data-rv].visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 01 — HERO
+     ═══════════════════════════════════════════ -->
+<div style="position:fixed;top:24px;right:24px;z-index:999;display:inline-flex;border-radius:100px;overflow:hidden;border:1px solid rgba(255,255,255,.12);background:rgba(10,10,10,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)">
+  <a href="st-case-study.html" style="font-family:var(--mono);font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:8px 18px;color:rgba(255,255,255,.45);text-decoration:none;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.45)'">v1</a>
+  <span style="font-family:var(--mono);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:8px 18px;color:var(--dark);background:var(--lime);border-radius:100px">v2</span>
+</div>
+<section class="dark" style="padding-top:0;position:relative;overflow:hidden">
+  <!-- Squiggly lines background -->
+  <img src="img/squiggly-lines.svg" alt="" style="position:absolute;top:-340px;left:-97px;width:calc(100% + 185px);height:auto;pointer-events:none;opacity:.6">
+
+  <nav style="max-width:var(--col);margin:0 auto;padding:32px var(--pad);display:flex;justify-content:space-between;align-items:center;position:relative">
+    <div style="display:flex;gap:12px;align-items:center">
+      <img src="img/hero-mockup.png" alt="" style="width:44px;height:44px;border-radius:8px;object-fit:cover">
+      <span style="font-family:var(--mono);font-size:.81rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--light)">Selected work / 2026</span>
+    </div>
+    <div style="display:flex;gap:24px;align-items:center">
+      <span style="font-family:var(--mono);font-size:.69rem;letter-spacing:.08em;color:var(--mid)">UX ARCHITECTURE</span>
+      <span style="font-family:var(--mono);font-size:.69rem;letter-spacing:.08em;color:var(--mid)">14 MIN READ</span>
+    </div>
+  </nav>
+
+  <div class="col" style="padding-top:84px;position:relative" data-rv>
+    <div style="max-width:var(--col);display:flex;flex-direction:column;gap:26px">
+      <h1 style="font-family:var(--heading);font-weight:800;font-size:clamp(3.2rem,7.5vw,6.25rem);line-height:.88;letter-spacing:-.04em;max-width:1180px">
+        Untangling years of <span style="color:var(--red)">architecture debt.</span>
+      </h1>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end">
+        <p style="font-family:var(--body);font-size:clamp(1.25rem,2.5vw,2.06rem);line-height:1.18;color:var(--light);max-width:780px">
+          Users were calling staff to ask where things are,<br>on a site that had the answers.
+        </p>
+        <p style="font-family:var(--mono);font-size:.69rem;line-height:1.4;text-transform:uppercase;color:var(--mid);width:180px;text-align:right">Scroll to trace the rebuild ↓</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero media — 3 overlapping mockups with hover spread -->
+  <style>
+    .hero-media{position:relative;width:100%;height:560px;margin-top:84px;cursor:default}
+    .hero-card{
+      position:absolute;top:0;
+      width:min(900px,70vw);
+      border-radius:8px;overflow:hidden;
+      box-shadow:0 16px 32px -4px rgba(12,12,13,.1),0 4px 4px -4px rgba(12,12,13,.05);
+      transition:transform .55s cubic-bezier(.4,0,.2,1),left .55s cubic-bezier(.4,0,.2,1);
+      will-change:transform,left;
+    }
+    .hero-card img{width:100%;display:block}
+    .hero-card--homepage{left:calc(50% - min(900px,70vw)/2 - 160px);transform:rotate(1deg);z-index:1}
+    .hero-card--electricity{left:calc(50% - min(900px,70vw)/2 + 40px);transform:rotate(2deg);z-index:3}
+    .hero-card--gas{left:calc(50% - min(900px,70vw)/2 - 20px);transform:rotate(-1deg);z-index:2}
+    .hero-media:hover .hero-card--homepage{left:-12%;transform:rotate(0deg)}
+    .hero-media:hover .hero-card--electricity{left:calc(50% - min(900px,70vw)/2);transform:rotate(0deg)}
+    .hero-media:hover .hero-card--gas{left:calc(100% - min(900px,70vw) + 12%);transform:rotate(0deg)}
+  </style>
+  <div class="hero-media" data-rv>
+    <div class="hero-card hero-card--homepage">
+      <img src="img/hero-homepage.png" alt="ST Homepage — Reliable Energy">
+    </div>
+    <div class="hero-card hero-card--gas">
+      <img src="img/hero-gas-tariff.png" alt="Gas Facility Tariff page">
+    </div>
+    <div class="hero-card hero-card--electricity">
+      <img src="img/hero-electricity.png" alt="Electricity stakeholder page">
+    </div>
+  </div>
+
+  <!-- Media caption -->
+  <div style="max-width:100%;padding:16px var(--pad);display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.69rem;letter-spacing:.08em;position:relative" data-rv>
+    <span style="color:var(--mid)">VISUAL 01</span>
+    <span style="color:var(--light);text-transform:uppercase;font-weight:500">Monitor mockup — new ST homepage</span>
+  </div>
+
+  <!-- The assignment -->
+  <div class="col" style="padding-top:80px" data-rv>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:40px">
+      <p style="font-family:'Spline Sans Mono',var(--mono);font-size:1rem;line-height:normal;text-transform:uppercase;color:var(--lime);width:250px;flex-shrink:0">The assignment</p>
+      <p style="font-family:var(--body);font-size:1.5rem;line-height:1.42;color:var(--light);max-width:820px">
+        ST's portal had the content. It didn't have a path from what users needed to where that content lived. Years of unstructured additions had turned the site into an org chart that happened to be a website. I rebuilt the micro IA, content relationships, and taxonomy — then stayed through Drupal implementation to make sure it held.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 02 — CONTEXT
+     ═══════════════════════════════════════════ -->
+<section class="light" style="padding:128px 0" data-rv>
+  <div class="col" style="display:flex;flex-direction:column;gap:72px">
+
+    <!-- Section marker -->
+    <div style="display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:12px;font-weight:900;color:var(--dark)">
+      <span>01</span>
+      <span style="text-transform:uppercase">Context / mandate</span>
+    </div>
+
+    <!-- Heading + project status -->
+    <div style="display:flex;justify-content:space-between;align-items:start">
+      <h2 style="font-family:var(--heading);font-weight:700;font-size:clamp(2.4rem,4.5vw,4.1rem);line-height:1.2;letter-spacing:-.03em;color:var(--dark);max-width:720px">A structural rebuild, not a visual reskin.</h2>
+      <div style="width:260px;flex-shrink:0;display:flex;flex-direction:column;gap:14px">
+        <span style="font-family:var(--mono);font-size:11px;text-transform:uppercase;color:#66665f">Project state</span>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="width:10px;height:10px;background:var(--lime);flex-shrink:0"></span>
+          <span style="font-family:var(--body);font-weight:600;font-size:17px;color:var(--dark)">Launched April 2026</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div style="height:1px;background:#d2d1ca"></div>
+
+    <!-- Project facts -->
+    <div class="meta-grid" style="display:grid;grid-template-columns:repeat(4,1fr)" data-rv>
+      <div style="border-right:1px solid #d2d1ca;padding:0 24px;min-height:140px;display:flex;flex-direction:column;gap:20px">
+        <span style="font-family:var(--mono);font-size:11px;text-transform:uppercase;color:#71716b">Client</span>
+        <div style="font-family:var(--body);font-size:20px;line-height:1.32;color:var(--dark)">Suruhanjaya Tenaga (ST)<br>Energy Commission of Malaysia</div>
+      </div>
+      <div style="border-right:1px solid #d2d1ca;padding:0 24px;min-height:140px;display:flex;flex-direction:column;gap:20px">
+        <span style="font-family:var(--mono);font-size:11px;text-transform:uppercase;color:#71716b">Role</span>
+        <div style="font-family:var(--body);font-size:20px;line-height:1.32;color:var(--dark)">UX Architect</div>
+      </div>
+      <div style="border-right:1px solid #d2d1ca;padding:0 24px;min-height:140px;display:flex;flex-direction:column;gap:20px">
+        <span style="font-family:var(--mono);font-size:11px;text-transform:uppercase;color:#71716b">Timeline</span>
+        <div style="font-family:var(--body);font-size:20px;line-height:1.32;color:var(--dark)">8 Jan &rarr; 1 Apr 2026</div>
+      </div>
+      <div style="padding:0 24px;min-height:140px;display:flex;flex-direction:column;gap:20px">
+        <span style="font-family:var(--mono);font-size:11px;text-transform:uppercase;color:#71716b">Agency</span>
+        <div style="font-family:var(--body);font-size:20px;line-height:1.32;color:var(--dark)">Pocketpixel</div>
+      </div>
+    </div>
+
+    <!-- Scope split -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px" data-rv>
+      <div style="background:var(--dark);padding:30px;display:flex;flex-direction:column;gap:28px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font-family:var(--body);font-weight:600;font-size:26px;color:var(--light)">What I owned</span>
+          <span class="tag tag-lime" style="font-size:11px">Direct</span>
+        </div>
+        <p style="font-family:var(--body);font-size:17px;line-height:1.6;color:#a3a39d">Micro IA, content grouping, page relationships, taxonomy, user flows, inside-page UI, content migration, stakeholder liaison.</p>
+      </div>
+      <div style="border:1px solid var(--dark);padding:30px;display:flex;flex-direction:column;gap:28px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font-family:var(--body);font-weight:600;font-size:26px;color:var(--dark)">What I didn't</span>
+          <span style="display:inline-flex;font-family:var(--mono);font-size:11px;font-weight:600;text-transform:uppercase;padding:7px 10px;border-radius:999px;background:var(--light);border:1px solid #d2d1ca;color:var(--dark)">Boundary</span>
+        </div>
+        <p style="font-family:var(--body);font-size:17px;line-height:1.6;color:#4e4e49">High-level IA (ST leadership). Homepage (my creative director).</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 03 — PROBLEM
+     ═══════════════════════════════════════════ -->
+<section class="dark" data-rv>
+  <div class="col" style="display:flex;flex-direction:column;gap:72px">
+
+    <!-- Section marker -->
+    <div style="display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:12px;font-weight:900;color:#a3a39d">
+      <span>02</span>
+      <span style="text-transform:uppercase">Problem / Missing structure</span>
+    </div>
+
+    <!-- Title + issue list grid -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start">
+      <h2 style="font-family:var(--heading);font-weight:700;font-size:clamp(2.8rem,4.5vw,4.4rem);line-height:1.05;letter-spacing:-.03em;max-width:570px">The content existed. The path didn't.</h2>
+      <div style="display:flex;flex-direction:column">
+        <div style="padding:18px 0;border-bottom:1px solid #343431;display:flex;gap:16px;align-items:baseline">
+          <span style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--lime);min-width:22px">01</span>
+          <span style="font-family:var(--body);font-size:17px;line-height:1.6;color:var(--light)">4 navigation systems running on one site</span>
+        </div>
+        <div style="padding:18px 0;border-bottom:1px solid #343431;display:flex;gap:16px;align-items:baseline">
+          <span style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--lime);min-width:22px">02</span>
+          <span style="font-family:var(--body);font-size:17px;line-height:1.6;color:var(--light)">Deep hover menus with walls of text</span>
+        </div>
+        <div style="padding:18px 0;border-bottom:1px solid #343431;display:flex;gap:16px;align-items:baseline">
+          <span style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--lime);min-width:22px">03</span>
+          <span style="font-family:var(--body);font-size:17px;line-height:1.6;color:var(--light)">Important pages buried several layers deep</span>
+        </div>
+        <div style="padding:18px 0;border-bottom:1px solid #343431;display:flex;gap:16px;align-items:baseline">
+          <span style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--lime);min-width:22px">04</span>
+          <span style="font-family:var(--body);font-size:17px;line-height:1.6;color:var(--light)">Content grouped by department, not user need</span>
+        </div>
+        <div style="padding:18px 0;border-bottom:1px solid #343431;display:flex;gap:16px;align-items:baseline">
+          <span style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--lime);min-width:22px">05</span>
+          <span style="font-family:var(--body);font-size:17px;line-height:1.6;color:var(--light)">Links that looked like body text</span>
+        </div>
+        <div style="padding:18px 0;border-bottom:1px solid #343431;display:flex;gap:16px;align-items:baseline">
+          <span style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--lime);min-width:22px">06</span>
+          <span style="font-family:var(--body);font-size:17px;line-height:1.6;color:var(--light)">Duplicate entry points to the same content</span>
+        </div>
+        <div style="padding:18px 0;border-bottom:1px solid #343431;display:flex;gap:16px;align-items:baseline">
+          <span style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--lime);min-width:22px">07</span>
+          <span style="font-family:var(--body);font-size:17px;line-height:1.6;color:var(--light)">Staff manually guiding users to the right page</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Large statement -->
+    <p style="font-family:var(--body);font-size:clamp(1.6rem,2.8vw,2.4rem);line-height:1.45;font-weight:400;color:var(--light);max-width:840px">The problem wasn't missing content. It was missing structure — and 15 years of additions had buried it deeper with every update.</p>
+
+    <!-- Full-bleed IA map -->
+    <div data-rv>
+      <div style="background:#efefe9;border-radius:16px;padding:34px;display:flex;align-items:center;justify-content:center;min-height:520px;overflow:hidden">
+        <img src="img/old-ia-tree.png" alt="Old information architecture map" style="width:100%;height:100%;object-fit:contain;border-radius:8px">
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#a3a39d">
+        <span>Visual 02</span>
+        <span>Full-bleed old IA map — overwhelming scale</span>
+      </div>
+    </div>
+
+    <!-- Branch detail + CTA -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start" data-rv>
+      <div>
+        <img src="img/ia-detail-branch.png" alt="Cropped IA branch showing deep nesting" style="width:100%;max-width:780px;border-radius:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#a3a39d">
+          <span>Visual 03</span>
+          <span>Cropped branch detail — deep nesting</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:24px;padding-top:24px">
+        <p style="font-family:var(--body);font-size:17px;line-height:1.7;color:rgba(241,240,234,.75)">This single branch in the IA tree held 40+ child nodes — most duplicating content found elsewhere on the site. Users had no way to know which path was canonical.</p>
+        <a href="#" style="display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:16px 28px;border:1px solid var(--mid);border-radius:100px;color:var(--light);text-decoration:none;width:fit-content;transition:border-color .2s,background .2s" onmouseover="this.style.borderColor='var(--lime)';this.style.background='rgba(201,255,51,.06)'" onmouseout="this.style.borderColor='var(--mid)';this.style.background='transparent'">
+          Explore full IA board in FigJam
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 04 — CONTENT AUDIT
+     ═══════════════════════════════════════════ -->
+<section class="light" data-rv>
+  <div class="col">
+    <div class="sec-marker">03 / Process / Content audit</div>
+
+    <div class="split" style="margin-bottom:56px">
+      <h2>Map first. Decide second.</h2>
+      <div class="body">
+        <p>Before touching the IA, I catalogued every piece of content on the live site — 190+ items across legislation, forms, guidelines, tariffs, and corporate pages. Each got a disposition: remain, merge, remove, or restructure.</p>
+      </div>
+    </div>
+
+    <!-- Spreadsheet mockup -->
+    <div class="browser" data-rv>
+      <div class="browser-bar" style="justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="browser-dot r"></span><span class="browser-dot y"></span><span class="browser-dot g"></span>
+          <span style="font-family:var(--mono);font-size:.72rem;font-weight:500;color:var(--dim);margin-left:12px">ST_Content_Audit_Master_v12</span>
+        </div>
+        <div style="display:flex;gap:8px">
+          <span class="tag tag-lime" style="font-size:.6rem;padding:4px 10px">190+ Items</span>
+          <span class="tag tag-green" style="font-size:.6rem;padding:4px 10px">Live tracker</span>
+        </div>
+      </div>
+      <div class="browser-body" style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:.82rem">
+          <thead>
+            <tr style="border-bottom:2px solid var(--line-dark)">
+              <th style="text-align:left;padding:14px 16px;font-family:var(--mono);font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)">ID</th>
+              <th style="text-align:left;padding:14px 16px;font-family:var(--mono);font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)">Content item</th>
+              <th style="text-align:left;padding:14px 16px;font-family:var(--mono);font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)">Decision</th>
+              <th style="text-align:left;padding:14px 16px;font-family:var(--mono);font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)">IA Status</th>
+              <th style="text-align:left;padding:14px 16px;font-family:var(--mono);font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)">CMS Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--line-dark)">
+              <td style="padding:12px 16px;font-family:var(--mono);font-size:.75rem;color:var(--dim)">023</td>
+              <td style="padding:12px 16px">Electricity Supply Act 1990</td>
+              <td style="padding:12px 16px"><span class="tag tag-green" style="font-size:.6rem;padding:3px 8px">Remain</span></td>
+              <td style="padding:12px 16px;color:var(--dim);font-size:.8rem">Mapped</td>
+              <td style="padding:12px 16px;color:var(--dim);font-size:.8rem">Migrated</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--line-dark)">
+              <td style="padding:12px 16px;font-family:var(--mono);font-size:.75rem;color:var(--dim)">024</td>
+              <td style="padding:12px 16px">Licence Types Overview</td>
+              <td style="padding:12px 16px"><span class="tag tag-green" style="font-size:.6rem;padding:3px 8px">Remain</span></td>
+              <td style="padding:12px 16px;color:var(--dim);font-size:.8rem">Mapped</td>
+              <td style="padding:12px 16px;color:var(--dim);font-size:.8rem">Migrated</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--line-dark)">
+              <td style="padding:12px 16px;font-family:var(--mono);font-size:.75rem;color:var(--dim)">025</td>
+              <td style="padding:12px 16px">Electricity Tariff Schedule (Duplicate)</td>
+              <td style="padding:12px 16px"><span class="tag tag-yellow" style="font-size:.6rem;padding:3px 8px">Redundant</span></td>
+              <td style="padding:12px 16px;color:var(--dim);font-size:.8rem">Merged</td>
+              <td style="padding:12px 16px;color:var(--dim);font-size:.8rem">Archived</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--line-dark)">
+              <td style="padding:12px 16px;font-family:var(--mono);font-size:.75rem;color:var(--dim)">026</td>
+              <td style="padding:12px 16px">Gas Supply (Amendment) Act 2016</td>
+              <td style="padding:12px 16px"><span class="tag tag-green" style="font-size:.6rem;padding:3px 8px">Remain</span></td>
+              <td style="padding:12px 16px;color:var(--dim);font-size:.8rem">Mapped</td>
+              <td style="padding:12px 16px;color:var(--dim);font-size:.8rem">In progress</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--line-dark)">
+              <td style="padding:12px 16px;font-family:var(--mono);font-size:.75rem;color:var(--dim)">027</td>
+              <td style="padding:12px 16px">Old Contact Form (Broken)</td>
+              <td style="padding:12px 16px"><span class="tag tag-red" style="font-size:.6rem;padding:3px 8px">Remove</span></td>
+              <td style="padding:12px 16px;color:var(--dim);font-size:.8rem">N/A</td>
+              <td style="padding:12px 16px;color:var(--dim);font-size:.8rem">Deleted</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--line-dark)">
+              <td style="padding:12px 16px;font-family:var(--mono);font-size:.75rem;color:var(--dim)">028</td>
+              <td style="padding:12px 16px">Safety Guidelines for Contractors</td>
+              <td style="padding:12px 16px"><span class="tag tag-green" style="font-size:.6rem;padding:3px 8px">Remain</span></td>
+              <td style="padding:12px 16px;color:var(--dim);font-size:.8rem">Mapped</td>
+              <td style="padding:12px 16px;color:var(--dim);font-size:.8rem">Migrated</td>
+            </tr>
+            <tr>
+              <td style="padding:12px 16px;font-family:var(--mono);font-size:.75rem;color:var(--dim)">029</td>
+              <td style="padding:12px 16px">Renewable Energy Fund (Duplicate)</td>
+              <td style="padding:12px 16px"><span class="tag tag-yellow" style="font-size:.6rem;padding:3px 8px">Redundant</span></td>
+              <td style="padding:12px 16px;color:var(--dim);font-size:.8rem">Merged</td>
+              <td style="padding:12px 16px;color:var(--dim);font-size:.8rem">Archived</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="padding:12px 16px;font-family:var(--mono);font-size:.7rem;color:var(--dim);border-top:1px solid var(--line-dark)">
+          Showing rows 23&ndash;29 of 194
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:1.05rem;line-height:1.75;color:rgba(10,10,10,.65);max-width:700px;margin-top:40px" data-rv>
+      Without this map, every IA decision downstream would've been guesswork.
+    </p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 05 — MID-PROJECT RESET
+     ═══════════════════════════════════════════ -->
+<section class="dark" data-rv>
+  <div class="col">
+    <div class="sec-marker">04 / Constraint / Mid-project reset</div>
+
+    <div class="split" style="margin-bottom:48px">
+      <h2>The direction changed. The date didn't.</h2>
+      <div class="body">
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px">
+          <span class="tag tag-orange">February reset</span>
+          <span class="tag tag-outline" style="font-size:.62rem">No timeline extension / Launch: 1 Apr 2026</span>
+        </div>
+        <p>A leadership change in February replaced the user-oriented IA I'd built with a corporate-structured mandate. The IA had to be rebuilt from the new direction — without moving the launch date.</p>
+      </div>
+    </div>
+
+    <!-- Three-column narrative -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:64px" data-rv>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--purple)"></span>
+          <span style="font-family:var(--mono);font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--purple)">Initial direction</span>
+        </div>
+        <p style="font-size:.92rem;line-height:1.65;color:rgba(242,240,237,.7)">The first IA grouped content by what users actually searched for — licensing, billing, safety. User-oriented structure.</p>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--lime)"></span>
+          <span style="font-family:var(--mono);font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--lime)">Leadership change</span>
+        </div>
+        <p style="font-size:.92rem;line-height:1.65;color:rgba(242,240,237,.7)">New leadership wanted the portal to reflect the organization's divisions — Electricity, Gas, Sustainability — not user tasks.</p>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--orange)"></span>
+          <span style="font-family:var(--mono);font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--orange)">What moved</span>
+        </div>
+        <p style="font-size:.92rem;line-height:1.65;color:rgba(242,240,237,.7)">IA, taxonomy, content mapping, and all downstream design work. Everything except the audit itself had to be reworked.</p>
+      </div>
+    </div>
+
+    <!-- IA Comparison -->
+    <div class="compare" data-rv>
+      <div class="compare-panel" style="border-color:rgba(140,98,255,.3)">
+        <div class="compare-label" style="color:var(--purple)">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--purple)"></span>
+          Old proposed IA
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:20px">
+          <span class="tag tag-purple" style="font-size:.58rem;padding:3px 8px">Jan</span>
+          <span class="tag tag-outline" style="font-size:.58rem;padding:3px 8px">User-oriented</span>
+        </div>
+        <img src="img/old-proposed-ia.png" alt="Old proposed IA structure" style="width:100%;border-radius:8px">
+      </div>
+      <div class="compare-panel" style="border-color:rgba(201,255,51,.3)">
+        <div class="compare-label" style="color:var(--lime)">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--lime)"></span>
+          New IA
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:20px">
+          <span class="tag tag-lime" style="font-size:.58rem;padding:3px 8px">Feb</span>
+          <span class="tag tag-outline" style="font-size:.58rem;padding:3px 8px">Corporate</span>
+        </div>
+        <img src="img/new-ia.png" alt="New IA structure" style="width:100%;border-radius:8px">
+      </div>
+    </div>
+
+    <div style="margin-top:48px;padding:24px 32px;border-left:3px solid var(--lime);background:rgba(201,255,51,.04);border-radius:0 8px 8px 0" data-rv>
+      <p style="font-size:1rem;line-height:1.7;color:rgba(242,240,237,.8);font-style:italic">
+        "Group related information first, surface the right level at each step, give users a predictable path."
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 06 — REACH VS FINDABILITY
+     ═══════════════════════════════════════════ -->
+<section class="light" data-rv>
+  <div class="col">
+    <div class="sec-marker">05 / Tradeoff / Reach vs findability</div>
+
+    <div class="split" style="margin-bottom:56px">
+      <h2>More clicks. Less doubt.</h2>
+      <div class="body">
+        <p>The old navigation optimised for reach — everything within two hovers. The result was mega-menus that overwhelmed users. The new structure trades hover-depth for decision clarity.</p>
+      </div>
+    </div>
+
+    <!-- Pattern comparison -->
+    <div class="compare" data-rv>
+      <div class="compare-panel" style="background:#fff;border-color:var(--line-dark)">
+        <div class="compare-label" style="color:var(--orange)">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--orange)"></span>
+          Old pattern
+        </div>
+        <div style="text-align:center;padding:24px 0">
+          <div style="font-family:var(--heading);font-weight:900;font-size:3rem;color:var(--dark)">2</div>
+          <div style="font-family:var(--mono);font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:4px">Hovers</div>
+        </div>
+        <p style="font-size:.85rem;line-height:1.6;color:var(--dim);text-align:center;margin-bottom:20px">Optimised for speed</p>
+        <div style="padding:16px;background:rgba(255,107,69,.08);border:1px solid rgba(255,107,69,.2);border-radius:8px">
+          <p style="font-size:.82rem;line-height:1.5;color:var(--orange);text-align:center">Reach anything in 2 hovers. In practice, they called staff.</p>
+        </div>
+      </div>
+      <div class="compare-panel" style="background:#fff;border-color:var(--line-dark)">
+        <div class="compare-label" style="color:var(--lime);filter:brightness(.6)">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--lime)"></span>
+          New pattern
+        </div>
+        <div style="text-align:center;padding:24px 0">
+          <div style="font-family:var(--heading);font-weight:900;font-size:3rem;color:var(--dark)">3&ndash;6</div>
+          <div style="font-family:var(--mono);font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:4px">Choices</div>
+        </div>
+        <p style="font-size:.85rem;line-height:1.6;color:var(--dim);text-align:center;margin-bottom:20px">Optimised for confidence</p>
+        <div style="padding:16px;background:rgba(201,255,51,.12);border:1px solid rgba(201,255,51,.3);border-radius:8px">
+          <p style="font-size:.82rem;line-height:1.5;color:#5a7a00;text-align:center;font-weight:500">One clear decision at a time.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progressive path -->
+    <div style="margin-top:56px" data-rv>
+      <div style="font-family:var(--mono);font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:20px">Progressive disclosure path</div>
+      <div style="display:flex;gap:0;align-items:stretch;flex-wrap:wrap">
+        <div style="flex:1;min-width:140px;padding:20px 24px;background:#fff;border:1px solid var(--line-dark);border-radius:10px 0 0 10px;position:relative">
+          <div style="font-family:var(--mono);font-size:.6rem;font-weight:600;color:var(--dim);margin-bottom:6px">01</div>
+          <div style="font-family:var(--heading);font-weight:600;font-size:.9rem">Stakeholders</div>
+        </div>
+        <div style="flex:1;min-width:140px;padding:20px 24px;background:#fff;border:1px solid var(--line-dark);border-left:none">
+          <div style="font-family:var(--mono);font-size:.6rem;font-weight:600;color:var(--dim);margin-bottom:6px">02</div>
+          <div style="font-family:var(--heading);font-weight:600;font-size:.9rem">Electricity</div>
+        </div>
+        <div style="flex:1;min-width:140px;padding:20px 24px;background:#fff;border:1px solid var(--line-dark);border-left:none">
+          <div style="font-family:var(--mono);font-size:.6rem;font-weight:600;color:var(--dim);margin-bottom:6px">03</div>
+          <div style="font-family:var(--heading);font-weight:600;font-size:.9rem">Licensing</div>
+        </div>
+        <div style="flex:1;min-width:140px;padding:20px 24px;background:#fff;border:1px solid var(--line-dark);border-left:none">
+          <div style="font-family:var(--mono);font-size:.6rem;font-weight:600;color:var(--dim);margin-bottom:6px">04</div>
+          <div style="font-family:var(--heading);font-weight:600;font-size:.9rem">Application list</div>
+        </div>
+        <div style="flex:1;min-width:140px;padding:20px 24px;background:var(--dark);border:1px solid var(--line);border-left:none;border-radius:0 10px 10px 0;color:var(--light)">
+          <div style="font-family:var(--mono);font-size:.6rem;font-weight:600;color:var(--lime);margin-bottom:6px">05</div>
+          <div style="font-family:var(--heading);font-weight:600;font-size:.9rem">Detail + CTA</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 07 — STAKEHOLDER NEGOTIATION
+     ═══════════════════════════════════════════ -->
+<section class="dark" data-rv>
+  <div class="col">
+    <div class="sec-marker">06 / Tradeoff / Stakeholder negotiation</div>
+
+    <div class="split" style="margin-bottom:56px">
+      <h2>Consistency was the argument.</h2>
+      <div class="body">
+        <p>The client wanted to hyperlink table rows to PDFs and remove the download cards. I pushed back: every PDF download across the portal uses the card pattern. One section breaking that means users re-learn how downloads work.</p>
+      </div>
+    </div>
+
+    <!-- Before / After -->
+    <div class="compare" data-rv>
+      <div class="compare-panel" style="border-color:rgba(255,107,69,.3)">
+        <div class="compare-label" style="color:var(--orange)">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--orange)"></span>
+          Client ask
+        </div>
+        <!-- Table mockup with PDF links -->
+        <div style="background:var(--surface2);border-radius:8px;padding:20px;margin-top:16px">
+          <table style="width:100%;border-collapse:collapse;font-size:.78rem">
+            <tr style="border-bottom:1px solid var(--line)">
+              <td style="padding:10px 12px;color:var(--mid)">Tariff Schedule 2026</td>
+              <td style="padding:10px 12px;text-align:right"><span style="color:#5b9aff;text-decoration:underline;cursor:pointer">Download PDF</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--line)">
+              <td style="padding:10px 12px;color:var(--mid)">Electricity Pricing Guide</td>
+              <td style="padding:10px 12px;text-align:right"><span style="color:#5b9aff;text-decoration:underline;cursor:pointer">Download PDF</span></td>
+            </tr>
+            <tr>
+              <td style="padding:10px 12px;color:var(--mid)">Application Form A1</td>
+              <td style="padding:10px 12px;text-align:right"><span style="color:#5b9aff;text-decoration:underline;cursor:pointer">Download PDF</span></td>
+            </tr>
+          </table>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:16px;padding:12px 16px;background:rgba(255,107,69,.08);border:1px solid rgba(255,107,69,.2);border-radius:8px">
+          <span style="font-size:1rem">&#9888;</span>
+          <span style="font-size:.78rem;line-height:1.4;color:var(--orange)">Breaks the download pattern used everywhere else</span>
+        </div>
+      </div>
+      <div class="compare-panel" style="border-color:rgba(201,255,51,.3)">
+        <div class="compare-label" style="color:var(--lime)">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--lime)"></span>
+          Shipped
+        </div>
+        <!-- Card pattern mockup -->
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">
+          <div style="background:var(--surface2);border-radius:8px;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line)">
+            <div>
+              <div style="font-size:.82rem;font-weight:500;margin-bottom:4px">Tariff Schedule 2026</div>
+              <div style="font-family:var(--mono);font-size:.65rem;color:var(--dim)">PDF &middot; 2.1 MB</div>
+            </div>
+            <div style="width:32px;height:32px;border-radius:8px;background:var(--lime);display:flex;align-items:center;justify-content:center;font-size:.8rem">&#8595;</div>
+          </div>
+          <div style="background:var(--surface2);border-radius:8px;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line)">
+            <div>
+              <div style="font-size:.82rem;font-weight:500;margin-bottom:4px">Electricity Pricing Guide</div>
+              <div style="font-family:var(--mono);font-size:.65rem;color:var(--dim)">PDF &middot; 1.8 MB</div>
+            </div>
+            <div style="width:32px;height:32px;border-radius:8px;background:var(--lime);display:flex;align-items:center;justify-content:center;font-size:.8rem">&#8595;</div>
+          </div>
+          <div style="background:var(--surface2);border-radius:8px;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line)">
+            <div>
+              <div style="font-size:.82rem;font-weight:500;margin-bottom:4px">Application Form A1</div>
+              <div style="font-family:var(--mono);font-size:.65rem;color:var(--dim)">PDF &middot; 340 KB</div>
+            </div>
+            <div style="width:32px;height:32px;border-radius:8px;background:var(--lime);display:flex;align-items:center;justify-content:center;font-size:.8rem">&#8595;</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:16px;padding:12px 16px;background:rgba(201,255,51,.06);border:1px solid rgba(201,255,51,.2);border-radius:8px">
+          <span style="font-size:1rem">&#10003;</span>
+          <span style="font-size:.78rem;line-height:1.4;color:var(--lime)">Table stays reference. Cards handle downloads.</span>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:1rem;line-height:1.7;color:rgba(242,240,237,.65);max-width:700px;margin-top:40px" data-rv>
+      Every PDF download across the portal uses the card pattern. One section breaking that means users re-learn how downloads work. Table stays as reference. Cards handle downloads.
+    </p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 08 — SOLUTION / UI
+     ═══════════════════════════════════════════ -->
+<section class="light" data-rv>
+  <div class="col">
+    <div class="sec-marker">07 / Solution / UI reinforced the architecture</div>
+
+    <div class="split" style="margin-bottom:56px">
+      <h2>The interface made the structure visible.</h2>
+      <div class="body">
+        <p>The IA decisions only hold if the UI makes the hierarchy obvious. Four principles guided every page layout and component choice.</p>
+      </div>
+    </div>
+
+    <!-- 4 principle cards -->
+    <div class="principle-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:64px" data-rv>
+      <div class="card">
+        <div class="card-num">01</div>
+        <h4>Horizontal cards</h4>
+        <p>Scannable rows that show one decision per line, replacing stacked vertical cards that hid content below the fold.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">02</div>
+        <h4>Stronger CTA treatment</h4>
+        <p>Primary actions got visual weight — filled buttons and contrast backgrounds — so users always knew the next step.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">03</div>
+        <h4>Focused landing pages</h4>
+        <p>Each topic landing shows only its children. No cross-links, no sidebar promotions, no competing navigation.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">04</div>
+        <h4>One job per inside page</h4>
+        <p>Detail pages do one thing: present the content and its CTA. Reference stays in tables, downloads stay in cards.</p>
+      </div>
+    </div>
+
+    <!-- UI screenshots in browser frames -->
+    <div class="browser" style="margin-bottom:32px" data-rv>
+      <div class="browser-bar">
+        <span class="browser-dot r"></span><span class="browser-dot y"></span><span class="browser-dot g"></span>
+        <span class="browser-url">st.gov.my/stakeholders/electricity/licensing</span>
+      </div>
+      <div class="browser-body" style="padding:0">
+        <img src="img/ui-cards-page.png" alt="Licensing page with horizontal card layout" style="width:100%;display:block">
+      </div>
+    </div>
+
+    <!-- Page family previews -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:32px" data-rv>
+      <div>
+        <div class="browser" style="margin-bottom:10px">
+          <div class="browser-bar" style="padding:8px 12px">
+            <span class="browser-dot r" style="width:7px;height:7px"></span><span class="browser-dot y" style="width:7px;height:7px"></span><span class="browser-dot g" style="width:7px;height:7px"></span>
+          </div>
+          <div class="browser-body" style="min-height:180px;padding:0">
+            <img src="img/topic-landing.png" alt="Topic landing page" style="width:100%;display:block">
+          </div>
+        </div>
+        <div style="font-family:var(--mono);font-size:.65rem;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--dim)">Topic page</div>
+      </div>
+      <div>
+        <div class="browser" style="margin-bottom:10px">
+          <div class="browser-bar" style="padding:8px 12px">
+            <span class="browser-dot r" style="width:7px;height:7px"></span><span class="browser-dot y" style="width:7px;height:7px"></span><span class="browser-dot g" style="width:7px;height:7px"></span>
+          </div>
+          <div class="browser-body" style="min-height:180px;padding:0">
+            <img src="img/list-page.png" alt="List page" style="width:100%;display:block">
+          </div>
+        </div>
+        <div style="font-family:var(--mono);font-size:.65rem;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--dim)">List page</div>
+      </div>
+      <div>
+        <div class="browser" style="margin-bottom:10px">
+          <div class="browser-bar" style="padding:8px 12px">
+            <span class="browser-dot r" style="width:7px;height:7px"></span><span class="browser-dot y" style="width:7px;height:7px"></span><span class="browser-dot g" style="width:7px;height:7px"></span>
+          </div>
+          <div class="browser-body" style="min-height:180px;padding:0">
+            <img src="img/detail-cta.png" alt="Detail page with CTA" style="width:100%;display:block">
+          </div>
+        </div>
+        <div style="font-family:var(--mono);font-size:.65rem;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--dim)">Detail page</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 09 — SURVIVING DRUPAL
+     ═══════════════════════════════════════════ -->
+<section class="dark" data-rv>
+  <div class="col">
+    <div class="sec-marker">08 / Process / Surviving Drupal</div>
+
+    <div class="split" style="margin-bottom:56px">
+      <h2>The handoff didn't end at the handoff.</h2>
+      <div class="body">
+        <p>Drupal's content model doesn't map cleanly to a designed IA. Taxonomy terms, content types, and view modes all had to be structured to preserve the hierarchy I'd built — otherwise the CMS would silently flatten it.</p>
+      </div>
+    </div>
+
+    <!-- Drupal CMS mockup -->
+    <div class="browser" data-rv>
+      <div class="browser-bar">
+        <span class="browser-dot r"></span><span class="browser-dot y"></span><span class="browser-dot g"></span>
+        <span class="browser-url">st.gov.my/admin/content</span>
+      </div>
+      <div class="browser-body" style="display:flex;min-height:400px">
+        <!-- Sidebar -->
+        <div style="width:220px;background:#1a1a1a;border-right:1px solid var(--line);padding:20px 0;flex-shrink:0">
+          <div style="padding:8px 20px;font-family:var(--mono);font-size:.7rem;color:var(--mid);margin-bottom:4px">Content</div>
+          <div style="padding:8px 20px;font-family:var(--mono);font-size:.7rem;color:var(--mid);margin-bottom:4px">Structure</div>
+          <div style="padding:8px 20px;font-family:var(--mono);font-size:.7rem;color:var(--lime);background:rgba(201,255,51,.06);border-left:2px solid var(--lime);margin-bottom:4px">Taxonomy</div>
+          <div style="padding:8px 20px;font-family:var(--mono);font-size:.7rem;color:var(--mid);margin-bottom:4px">Media</div>
+          <div style="padding:8px 20px;font-family:var(--mono);font-size:.7rem;color:var(--mid);margin-bottom:4px">Reports</div>
+          <div style="padding:8px 20px;font-family:var(--mono);font-size:.7rem;color:var(--mid)">Configuration</div>
+        </div>
+        <!-- Content area -->
+        <div style="flex:1;padding:24px 32px">
+          <div style="font-family:var(--heading);font-weight:600;font-size:1.1rem;margin-bottom:20px">Taxonomy &mdash; Topic hierarchy</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="padding:10px 16px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;font-size:.82rem;display:flex;justify-content:space-between;align-items:center">
+              <span>Stakeholders</span>
+              <span style="font-family:var(--mono);font-size:.65rem;color:var(--dim)">6 children</span>
+            </div>
+            <div style="padding:10px 16px;margin-left:24px;background:rgba(201,255,51,.03);border:1px solid rgba(201,255,51,.15);border-radius:6px;font-size:.82rem;display:flex;justify-content:space-between;align-items:center">
+              <span>Electricity</span>
+              <span style="font-family:var(--mono);font-size:.65rem;color:var(--dim)">8 children</span>
+            </div>
+            <div style="padding:10px 16px;margin-left:48px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;font-size:.82rem;display:flex;justify-content:space-between;align-items:center">
+              <span>Licensing</span>
+              <span style="font-family:var(--mono);font-size:.65rem;color:var(--dim)">4 children</span>
+            </div>
+            <div style="padding:10px 16px;margin-left:48px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;font-size:.82rem;display:flex;justify-content:space-between;align-items:center">
+              <span>Tariff &amp; Pricing</span>
+              <span style="font-family:var(--mono);font-size:.65rem;color:var(--dim)">3 children</span>
+            </div>
+            <div style="padding:10px 16px;margin-left:24px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;font-size:.82rem;display:flex;justify-content:space-between;align-items:center">
+              <span>Gas</span>
+              <span style="font-family:var(--mono);font-size:.65rem;color:var(--dim)">5 children</span>
+            </div>
+            <div style="padding:10px 16px;margin-left:24px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;font-size:.82rem;display:flex;justify-content:space-between;align-items:center">
+              <span>Sustainability</span>
+              <span style="font-family:var(--mono);font-size:.65rem;color:var(--dim)">4 children</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:1rem;line-height:1.7;color:rgba(242,240,237,.65);max-width:700px;margin-top:40px" data-rv>
+      If I'd handed off the IA as a document and walked away, the CMS would have flattened the hierarchy within a week of content entry.
+    </p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 10 — DEPENDENCY CASCADE
+     ═══════════════════════════════════════════ -->
+<section class="light" data-rv>
+  <div class="col">
+    <div class="sec-marker">09 / Constraint / Dependency cascade</div>
+
+    <div class="split" style="margin-bottom:56px">
+      <h2>One change upstream. Rework everywhere downstream.</h2>
+      <div class="body">
+        <p>When the IA changed in February, everything downstream broke. Taxonomy, content mapping, design, and implementation all had to be realigned — in sequence, not in parallel.</p>
+      </div>
+    </div>
+
+    <!-- Dependency chain -->
+    <div style="display:flex;align-items:center;gap:0;margin-bottom:56px;flex-wrap:wrap" data-rv>
+      <div style="flex:1;min-width:120px;padding:20px 16px;background:var(--orange);border-radius:10px 0 0 10px;text-align:center">
+        <div style="font-family:var(--heading);font-weight:700;font-size:.92rem;color:#fff;margin-bottom:4px">IA</div>
+        <div style="font-family:var(--mono);font-size:.6rem;font-weight:500;color:rgba(255,255,255,.7)">Changed Feb</div>
+      </div>
+      <div style="width:24px;height:2px;background:var(--dim);flex-shrink:0"></div>
+      <div style="flex:1;min-width:120px;padding:20px 16px;background:#fff;border:1px solid var(--line-dark);text-align:center">
+        <div style="font-family:var(--heading);font-weight:700;font-size:.92rem;margin-bottom:4px">Taxonomy</div>
+        <div style="font-family:var(--mono);font-size:.6rem;font-weight:500;color:var(--dim)">Rebuilt</div>
+      </div>
+      <div style="width:24px;height:2px;background:var(--dim);flex-shrink:0"></div>
+      <div style="flex:1;min-width:120px;padding:20px 16px;background:#fff;border:1px solid var(--line-dark);text-align:center">
+        <div style="font-family:var(--heading);font-weight:700;font-size:.92rem;margin-bottom:4px">Content</div>
+        <div style="font-family:var(--mono);font-size:.6rem;font-weight:500;color:var(--dim)">Remapped</div>
+      </div>
+      <div style="width:24px;height:2px;background:var(--dim);flex-shrink:0"></div>
+      <div style="flex:1;min-width:120px;padding:20px 16px;background:#fff;border:1px solid var(--line-dark);text-align:center">
+        <div style="font-family:var(--heading);font-weight:700;font-size:.92rem;margin-bottom:4px">Design</div>
+        <div style="font-family:var(--mono);font-size:.6rem;font-weight:500;color:var(--dim)">Reworked</div>
+      </div>
+      <div style="width:24px;height:2px;background:var(--dim);flex-shrink:0"></div>
+      <div style="flex:1;min-width:120px;padding:20px 16px;background:var(--lime);border-radius:0 10px 10px 0;text-align:center">
+        <div style="font-family:var(--heading);font-weight:700;font-size:.92rem;color:var(--dark);margin-bottom:4px">Implementation</div>
+        <div style="font-family:var(--mono);font-size:.6rem;font-weight:500;color:rgba(0,0,0,.5)">Realigned</div>
+      </div>
+    </div>
+
+    <!-- 4 lesson cards -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px" data-rv>
+      <div class="card">
+        <div class="card-num">01</div>
+        <h4>Map dependencies early</h4>
+        <p>Know what breaks before you touch anything.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">02</div>
+        <h4>Lock IA-taxonomy relationships</h4>
+        <p>Once the IA is approved, the taxonomy structure should be treated as frozen.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">03</div>
+        <h4>Identify content ownership</h4>
+        <p>Every content item needs a named owner who approves changes to its position in the IA.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">04</div>
+        <h4>Build validation into the timeline</h4>
+        <p>Schedule checkpoints where IA, taxonomy, and CMS are verified against each other.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 11 — OUTCOME
+     ═══════════════════════════════════════════ -->
+<section class="dark" data-rv>
+  <div class="col">
+    <div class="sec-marker">10 / Outcome / Directional evidence</div>
+
+    <div class="split" style="margin-bottom:48px">
+      <h2>A big number. A careful claim.</h2>
+      <div class="body">
+        <p>The traffic numbers are dramatic, but I can't claim causation. The portal revamp coincided with broader outreach, new regulatory announcements, and increased public attention on energy policy.</p>
+      </div>
+    </div>
+
+    <!-- Caveat box -->
+    <div style="padding:20px 24px;border:1px solid rgba(255,107,69,.3);border-left:3px solid var(--orange);border-radius:0 8px 8px 0;margin-bottom:48px;background:rgba(255,107,69,.04)" data-rv>
+      <p style="font-size:.88rem;line-height:1.6;color:var(--orange)">
+        <strong>Validation caveat:</strong> These numbers reflect correlation, not proven causation. Multiple factors contributed to the traffic increase.
+      </p>
+    </div>
+
+    <!-- Analytics -->
+    <div style="margin-bottom:24px" data-rv>
+      <div style="font-family:var(--mono);font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:40px">GA4 / New users</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end">
+        <div>
+          <div class="stat-big" style="color:var(--orange)">~2K</div>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <span class="tag tag-outline" style="font-size:.58rem;padding:3px 8px">2025</span>
+            <span style="font-family:var(--mono);font-size:.7rem;color:var(--dim)">Old portal</span>
+          </div>
+        </div>
+        <div>
+          <div class="stat-big" style="color:var(--lime)">~357K</div>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <span class="tag tag-lime" style="font-size:.58rem;padding:3px 8px">2026</span>
+            <span style="font-family:var(--mono);font-size:.7rem;color:var(--dim)">New portal</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Proportional bar -->
+      <div style="margin-top:40px;display:flex;gap:4px;align-items:center">
+        <div style="width:12px;height:8px;background:var(--orange);border-radius:2px;flex-shrink:0"></div>
+        <div style="flex:1;height:8px;background:var(--lime);border-radius:2px"></div>
+      </div>
+    </div>
+
+    <p style="font-size:1rem;line-height:1.7;color:rgba(242,240,237,.5);max-width:600px;margin-top:32px;font-style:italic" data-rv>
+      Correlation is all I can honestly claim.
+    </p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 12 — REFLECTION
+     ═══════════════════════════════════════════ -->
+<section class="light" data-rv>
+  <div class="col">
+    <div class="sec-marker">11 / Reflection / What changed in my practice</div>
+
+    <div style="margin-bottom:56px">
+      <h2 style="font-family:var(--heading);font-weight:800;font-size:clamp(2rem,4vw,3rem);line-height:1.1;letter-spacing:-.03em;max-width:700px">The system only holds when someone holds the thread.</h2>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px" data-rv>
+      <div>
+        <div style="font-family:var(--mono);font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-bottom:24px">11.1 What I'd do differently</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:16px">
+          <li style="font-size:.92rem;line-height:1.7;padding-left:16px;border-left:2px solid var(--orange)">
+            <strong>Push for a content freeze earlier.</strong> Content was still being revised while I was mapping it. A formal freeze point would have saved a week of rework.
+          </li>
+          <li style="font-size:.92rem;line-height:1.7;padding-left:16px;border-left:2px solid var(--orange)">
+            <strong>Document the IA rationale per section, not just the structure.</strong> When the direction changed, I had to re-explain why each grouping existed. Written reasoning would have made the pivot faster.
+          </li>
+          <li style="font-size:.92rem;line-height:1.7;padding-left:16px;border-left:2px solid var(--orange)">
+            <strong>Build taxonomy earlier in parallel with IA.</strong> Waiting for IA sign-off before starting taxonomy meant the CMS team had less time to implement.
+          </li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-bottom:24px">11.2 What this made me better at</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:16px">
+          <li style="font-size:.92rem;line-height:1.7;padding-left:16px;border-left:2px solid var(--lime)">
+            <strong>Navigating mid-project pivots without losing structural integrity.</strong> The IA changed completely, but the principles I'd set — progressive disclosure, one job per page — survived the rewrite.
+          </li>
+          <li style="font-size:.92rem;line-height:1.7;padding-left:16px;border-left:2px solid var(--lime)">
+            <strong>Defending architecture decisions with pattern consistency.</strong> "This breaks the pattern" became a stronger argument than "this isn't best practice."
+          </li>
+          <li style="font-size:.92rem;line-height:1.7;padding-left:16px;border-left:2px solid var(--lime)">
+            <strong>Owning the IA through CMS implementation.</strong> Staying involved through Drupal taxonomy setup meant the structure survived handoff intact.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 13 — PHASE TWO
+     ═══════════════════════════════════════════ -->
+<section class="dark" data-rv>
+  <div class="col">
+    <div class="sec-marker">12 / Phase 2 / From navigation to conversation</div>
+
+    <div style="margin-bottom:48px">
+      <h2 style="font-family:var(--heading);font-weight:300;font-size:clamp(2rem,4.5vw,3.2rem);line-height:1.15;letter-spacing:-.02em;max-width:700px">
+        The same principle, now in conversation.
+      </h2>
+    </div>
+
+    <!-- Approach decision -->
+    <div class="compare" style="margin-bottom:56px" data-rv>
+      <div class="compare-panel" style="border-color:var(--line);opacity:.6">
+        <div class="compare-label" style="color:var(--mid)">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--mid)"></span>
+          Topic-based
+        </div>
+        <span class="tag tag-outline" style="font-size:.6rem;margin-bottom:12px">Not chosen</span>
+        <p style="font-size:.85rem;line-height:1.6;color:var(--mid);margin-top:12px">Organises the chatbot around content categories — the same structure as the portal nav. Users pick a topic first, then drill into sub-topics.</p>
+      </div>
+      <div class="compare-panel" style="border-color:rgba(201,255,51,.3)">
+        <div class="compare-label" style="color:var(--lime)">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--lime)"></span>
+          Intention-based
+        </div>
+        <span class="tag tag-lime" style="font-size:.6rem;margin-bottom:12px">ST accepted</span>
+        <p style="font-size:.85rem;line-height:1.6;color:rgba(242,240,237,.7);margin-top:12px">Starts with what the user wants to <em>do</em> — apply, check, report — then routes to the right flow. Mirrors the portal's progressive disclosure in conversation form.</p>
+      </div>
+    </div>
+
+    <!-- Chatbot flow -->
+    <div data-rv>
+      <div style="font-family:var(--mono);font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--purple);margin-bottom:24px">Cik Tenaga &mdash; intention model</div>
+
+      <!-- Origin node -->
+      <div style="text-align:center;margin-bottom:32px">
+        <div style="display:inline-block;padding:16px 32px;background:var(--purple);border-radius:12px;font-family:var(--heading);font-weight:600;font-size:1rem;color:#fff">
+          What would you like to do today?
+        </div>
+      </div>
+
+      <!-- Three intent branches -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="padding:14px 20px;background:rgba(140,98,255,.12);border:1px solid rgba(140,98,255,.25);border-radius:10px;text-align:center">
+            <div style="font-family:var(--heading);font-weight:600;font-size:.88rem;color:var(--purple)">Apply or register</div>
+          </div>
+          <div style="padding:10px 16px;background:var(--surface);border:1px solid var(--line);border-radius:8px;font-size:.78rem;color:var(--mid)">What type of application?</div>
+          <div style="padding:10px 16px;background:var(--surface);border:1px solid var(--line);border-radius:8px;font-size:.78rem;color:var(--mid)">Select your category</div>
+          <div style="padding:10px 16px;background:var(--surface);border:1px solid var(--line);border-radius:8px;font-size:.78rem;color:var(--mid)">Requirements checklist</div>
+          <div style="padding:10px 16px;background:rgba(201,255,51,.06);border:1px solid rgba(201,255,51,.2);border-radius:8px;font-size:.78rem;color:var(--lime);font-weight:500">Submit application &rarr;</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="padding:14px 20px;background:rgba(140,98,255,.12);border:1px solid rgba(140,98,255,.25);border-radius:10px;text-align:center">
+            <div style="font-family:var(--heading);font-weight:600;font-size:.88rem;color:var(--purple)">Check a status</div>
+          </div>
+          <div style="padding:10px 16px;background:var(--surface);border:1px solid var(--line);border-radius:8px;font-size:.78rem;color:var(--mid)">Application or complaint?</div>
+          <div style="padding:10px 16px;background:var(--surface);border:1px solid var(--line);border-radius:8px;font-size:.78rem;color:var(--mid)">Enter reference number</div>
+          <div style="padding:10px 16px;background:var(--surface);border:1px solid var(--line);border-radius:8px;font-size:.78rem;color:var(--mid)">Verify identity</div>
+          <div style="padding:10px 16px;background:rgba(201,255,51,.06);border:1px solid rgba(201,255,51,.2);border-radius:8px;font-size:.78rem;color:var(--lime);font-weight:500">View status &rarr;</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="padding:14px 20px;background:rgba(140,98,255,.12);border:1px solid rgba(140,98,255,.25);border-radius:10px;text-align:center">
+            <div style="font-family:var(--heading);font-weight:600;font-size:.88rem;color:var(--purple)">Report a problem</div>
+          </div>
+          <div style="padding:10px 16px;background:var(--surface);border:1px solid var(--line);border-radius:8px;font-size:.78rem;color:var(--mid)">What kind of issue?</div>
+          <div style="padding:10px 16px;background:var(--surface);border:1px solid var(--line);border-radius:8px;font-size:.78rem;color:var(--mid)">Location details</div>
+          <div style="padding:10px 16px;background:var(--surface);border:1px solid var(--line);border-radius:8px;font-size:.78rem;color:var(--mid)">Upload evidence</div>
+          <div style="padding:10px 16px;background:rgba(201,255,51,.06);border:1px solid rgba(201,255,51,.2);border-radius:8px;font-size:.78rem;color:var(--lime);font-weight:500">Submit report &rarr;</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:48px" data-rv>
+      <a href="#" class="btn btn-outline" style="border-color:var(--purple);color:var(--purple)">Explore chatbot flow in FigJam &rarr;</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 14 — FOOTER
+     ═══════════════════════════════════════════ -->
+<section class="lime-bg" style="padding:100px 0" data-rv>
+  <div class="col" style="text-align:center">
+    <span class="tag tag-dark" style="margin-bottom:32px;display:inline-flex">End of case study</span>
+    <h2 style="font-family:var(--heading);font-weight:800;font-size:clamp(2rem,5vw,3.6rem);line-height:1.05;letter-spacing:-.03em;margin-bottom:40px;color:var(--dark)">
+      Architecture is invisible &mdash;<br>until it fails.
+    </h2>
+    <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false" class="btn btn-dark" style="margin-bottom:64px">&uarr; Back to top</a>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:600px;margin:0 auto;padding-top:40px;border-top:1px solid rgba(0,0,0,.12);text-align:center">
+      <div>
+        <div style="font-family:var(--mono);font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(0,0,0,.4);margin-bottom:6px">Role</div>
+        <div style="font-family:var(--heading);font-weight:600;font-size:.92rem;color:var(--dark)">UX Architect</div>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(0,0,0,.4);margin-bottom:6px">Agency</div>
+        <div style="font-family:var(--heading);font-weight:600;font-size:.92rem;color:var(--dark)">Pocketpixel</div>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(0,0,0,.4);margin-bottom:6px">Launched</div>
+        <div style="font-family:var(--heading);font-weight:600;font-size:.92rem;color:var(--dark)">April 2026</div>
+      </div>
+    </div>
+
+    <p style="font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;color:rgba(0,0,0,.35);margin-top:48px">
+      Case / 04 &middot; ST Portal Revamp
+    </p>
+  </div>
+</section>
+
+<script>
+const rv=document.querySelectorAll('[data-rv]');
+const io=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');io.unobserve(x.target)}})},{threshold:.15});
+rv.forEach(x=>io.observe(x));
+</script>
+</body>
+</html>
